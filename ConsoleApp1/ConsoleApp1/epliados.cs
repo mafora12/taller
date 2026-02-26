@@ -1,11 +1,18 @@
 using System;
+using System.Collections.Generic; 
 
 namespace SistemaEmpleados
 {
+    public interface IBonificable
+    {
+        void AplicarBonificacion(decimal monto);
+    }
+
     public abstract class Empleado
     {
-        public string Id { get; private set; }
-        public string Nombre { get; private set; }
+        public string Id { get; protected set; }
+        public string Nombre { get; protected set; }
+        public decimal SalarioBase { get; protected set; }
 
         protected Empleado(string id, string nombre)
         {
@@ -17,90 +24,91 @@ namespace SistemaEmpleados
 
         public virtual void MostrarInformacion()
         {
-            Console.WriteLine($"ID: {Id}");
-            Console.WriteLine($"Nombre: {Nombre}");
+            Console.WriteLine($"ID: {Id} | Nombre: {Nombre}");
         }
     }
-}
 
-
-namespace SistemaEmpleados
-{
-    public class EmpleadoTiempoCompleto : Empleado
+    public class EmpleadoTiempoCompleto : Empleado, IBonificable
     {
-        public decimal SalarioFijo { get; private set; }
+        private decimal bonificacionAdicional = 0;
 
         public EmpleadoTiempoCompleto(string id, string nombre, decimal salarioFijo)
             : base(id, nombre)
         {
-            SalarioFijo = salarioFijo;
+            SalarioBase = salarioFijo;
         }
 
-        public override decimal CalcularSalario()
+        public void ActualizarSalario(decimal nuevoSalario)
         {
-            return SalarioFijo;
+            SalarioBase = nuevoSalario;
         }
+
+        public void ActualizarSalario(decimal nuevoSalario, decimal bonificacion)
+        {
+            SalarioBase = nuevoSalario;
+            bonificacionAdicional = bonificacion;
+        }
+
+        public void AplicarBonificacion(decimal monto) => bonificacionAdicional = monto;
+
+        public override decimal CalcularSalario() => SalarioBase + bonificacionAdicional;
 
         public override void MostrarInformacion()
         {
             base.MostrarInformacion();
-            Console.WriteLine("Tipo: Tiempo Completo");
-            Console.WriteLine($"Salario: {CalcularSalario():C}");
+            Console.WriteLine($"Tipo: Tiempo Completo | Total: {CalcularSalario():C}");
         }
     }
-}
 
-namespace SistemaEmpleados
-{
     public class EmpleadoPorHoras : Empleado
     {
         public int HorasTrabajadas { get; private set; }
-        public decimal ValorPorHora { get; private set; }
+        public decimal ValorHora { get; private set; }
 
-        public EmpleadoPorHoras(string id, string nombre, int horasTrabajadas, decimal valorPorHora)
+        public EmpleadoPorHoras(string id, string nombre, int horas, decimal valor)
             : base(id, nombre)
         {
-            HorasTrabajadas = horasTrabajadas;
-            ValorPorHora = valorPorHora;
+            HorasTrabajadas = horas;
+            ValorHora = valor;
         }
 
-        public override decimal CalcularSalario()
-        {
-            return HorasTrabajadas * ValorPorHora;
-        }
+        public override decimal CalcularSalario() => HorasTrabajadas * ValorHora;
 
         public override void MostrarInformacion()
         {
             base.MostrarInformacion();
-            Console.WriteLine("Tipo: Por Horas");
-            Console.WriteLine($"Salario: {CalcularSalario():C}");
+            Console.WriteLine($"Tipo: Por Horas | Total: {CalcularSalario():C}");
         }
     }
-}
 
-
-namespace SistemaEmpleados
-{
     class Program
     {
         static void Main(string[] args)
         {
-            List<Empleado> empleados = new List<Empleado>
-            {
-                new EmpleadoTiempoCompleto("1", "Ana", 3000000),
-                new EmpleadoPorHoras("2", "Luis", 160, 20000),
-                new EmpleadoTiempoCompleto("3", "Carlos", 3500000),
-                new EmpleadoPorHoras("4", "Marta", 120, 18000)
-            };
+            List<Empleado> nomina = new List<Empleado>();
 
-            Console.WriteLine("=== LISTA DE EMPLEADOS ===\n");
+            // Creación de objetos
+            EmpleadoTiempoCompleto emp1 = new EmpleadoTiempoCompleto("101", "Ana Maria", 3500000);
+            emp1.AplicarBonificacion(200000);
 
-            foreach (Empleado emp in empleados)
+            EmpleadoPorHoras emp2 = new EmpleadoPorHoras("102", "Juan Jose", 40, 50000);
+
+            EmpleadoTiempoCompleto emp3 = new EmpleadoTiempoCompleto("103", "Carlos Perez", 3000000);
+            emp3.ActualizarSalario(3200000, 150000);
+
+            nomina.Add(emp1);
+            nomina.Add(emp2);
+            nomina.Add(emp3);
+
+            Console.WriteLine("=== REPORTE DE NÓMINA POLIMÓRFICO ===\n");
+
+            foreach (var emp in nomina)
             {
                 emp.MostrarInformacion();
-                Console.WriteLine("---------------------------");
+                Console.WriteLine("-----------------------------------");
             }
 
+            Console.WriteLine("\nPresione cualquier tecla para salir...");
             Console.ReadKey();
         }
     }
