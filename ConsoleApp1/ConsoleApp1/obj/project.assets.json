@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\MARIANA\\Documents\\GitHub\\Taller_Scripting\\ConsoleApp1\\ConsoleApp1\\ConsoleApp1.csproj",
+      "projectUniqueName": "C:\\Users\\MARIANA\\Documents\\GitHub\\taller\\ConsoleApp1\\ConsoleApp1\\ConsoleApp1.csproj",
       "projectName": "ConsoleApp1",
-      "projectPath": "C:\\Users\\MARIANA\\Documents\\GitHub\\Taller_Scripting\\ConsoleApp1\\ConsoleApp1\\ConsoleApp1.csproj",
+      "projectPath": "C:\\Users\\MARIANA\\Documents\\GitHub\\taller\\ConsoleApp1\\ConsoleApp1\\ConsoleApp1.csproj",
       "packagesPath": "C:\\Users\\MARIANA\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\MARIANA\\Documents\\GitHub\\Taller_Scripting\\ConsoleApp1\\ConsoleApp1\\obj\\",
+      "outputPath": "C:\\Users\\MARIANA\\Documents\\GitHub\\taller\\ConsoleApp1\\ConsoleApp1\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
